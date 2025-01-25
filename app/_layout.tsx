@@ -10,9 +10,12 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { MMKV } from "react-native-mmkv";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+export const storage = new MMKV();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();

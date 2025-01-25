@@ -14,6 +14,7 @@ import InputBox from "@/components/InputBox";
 import CustomBtn from "@/components/CustomBtn";
 import RowTxtBtn from "@/components/RowTxtBtn";
 import { useRouter } from "expo-router";
+import { storage } from "../_layout";
 
 const Login = () => {
   const router = useRouter();
@@ -32,6 +33,8 @@ const Login = () => {
       const { data } = await http.post("/api/auth/login", { mobile, password });
       console.log("This is the data coming from thea apis", data);
       setLoading(false);
+      storage.set("authToken", data.token);
+      ToastMessage(data?.msg || "Login Successful");
       router.replace("/(tabs)");
     } catch (error: any) {
       setLoading(false);

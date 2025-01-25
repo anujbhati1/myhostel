@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     borderColor: appColors.lightGrey,
     paddingHorizontal: moderateScale(7),
     borderRadius: moderateScale(5),
+    paddingVertical: moderateScale(7),
   },
   title: {
     color: appColors.black,
