@@ -5,13 +5,13 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-import React, {useState} from 'react';
-import appColors from '../utils/appColors';
-import appIcons from '../utils/appIcons';
-import {moderateScale} from 'react-native-size-matters';
-import fontSize from '../utils/fontSizes';
-import {Controller} from 'react-hook-form';
+} from "react-native";
+import React, { useState } from "react";
+import appColors from "../utils/appColors";
+import appIcons from "../utils/appIcons";
+import { moderateScale } from "react-native-size-matters";
+import fontSize from "../utils/fontSizes";
+import { Controller } from "react-hook-form";
 
 interface InputBoxProps {
   name: string;
@@ -35,7 +35,10 @@ const InputBox = ({
       <Controller
         control={control}
         name={name}
-        render={({field: {value, onChange, onBlur}, fieldState: {error}}) => (
+        render={({
+          field: { value, onChange, onBlur },
+          fieldState: { error },
+        }) => (
           <>
             <View style={styles.txtInputView}>
               <TextInput
@@ -50,7 +53,8 @@ const InputBox = ({
               {isPassword ? (
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  onPress={() => setShowPassword(pre => !pre)}>
+                  onPress={() => setShowPassword((pre) => !pre)}
+                >
                   <Image
                     source={showPassword ? appIcons.eyeclose : appIcons.eye}
                     style={styles.icon}
@@ -75,9 +79,9 @@ const styles = StyleSheet.create({
   },
   inputView: {},
   txtInputView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     borderWidth: moderateScale(1),
     borderColor: appColors.lightGrey,
     paddingHorizontal: moderateScale(7),
@@ -85,18 +89,18 @@ const styles = StyleSheet.create({
   },
   title: {
     color: appColors.black,
-    fontWeight: '500',
+    fontWeight: "500",
     marginBottom: moderateScale(4),
   },
   textInput: {
     flex: 1,
     fontSize: fontSize.medium,
-    fontWeight: '500',
+    fontWeight: "500",
     color: appColors.black,
   },
   icon: {
     height: moderateScale(22),
     width: moderateScale(22),
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
 });

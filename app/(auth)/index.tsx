@@ -1,13 +1,13 @@
 import { SafeAreaView, StatusBar, ScrollView, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Colors } from "@/constants/Colors";
 import { moderateScale } from "react-native-size-matters";
-import { SignupValidator, SignupValidatorType } from "@/lib/signupValidators";
+import { LoginValidator, LoginValidatorType } from "@/lib/loginValidators";
 import http from "@/apis/api";
 import { ToastMessage } from "@/utils/toast";
 import { getError } from "@/utils/getErrMsg";
-import appColors from "@/utils/appColors";
 import Spacer from "@/utils/spacer";
 import AuthHeader from "@/components/AuthHeader";
 import InputBox from "@/components/InputBox";
@@ -15,39 +15,22 @@ import CustomBtn from "@/components/CustomBtn";
 import RowTxtBtn from "@/components/RowTxtBtn";
 import { useRouter } from "expo-router";
 
-const Signup = () => {
+const Login = () => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const { handleSubmit, control } = useForm<SignupValidatorType>({
+  const { handleSubmit, control } = useForm<LoginValidatorType>({
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      city: "",
-      mobile: "",
+      mobile: "1234567892",
+      password: "securepassword",
     },
-    resolver: zodResolver(SignupValidator),
+    resolver: zodResolver(LoginValidator),
   });
 
-  const handleSignup = async ({
-    name,
-    email,
-    password,
-    city,
-    mobile,
-  }: SignupValidatorType) => {
+  const handleLogin = async ({ mobile, password }: LoginValidatorType) => {
     try {
       setLoading(true);
-      const { data } = await http.post("/api/auth/signup", {
-        name,
-        email,
-        role: "ADMIN",
-        city,
-        mobile,
-        password,
-      });
-      console.log("This is data", data);
-      // AsyncStorage.setItem('userId', data.data.id);
+      const { data } = await http.post("/api/auth/login", { mobile, password });
+      console.log("This is the data coming from thea apis", data);
       setLoading(false);
       router.replace("/(tabs)");
     } catch (error: any) {
@@ -58,7 +41,10 @@ const Signup = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={appColors.white} barStyle={"dark-content"} />
+      <StatusBar
+        backgroundColor={Colors.light.background}
+        barStyle={"dark-content"}
+      />
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps='always'
@@ -66,57 +52,39 @@ const Signup = () => {
       >
         <Spacer height={15} />
         <AuthHeader
-          title={`Create a new ${"\n"}account.`}
-          desc='Create an account to start adding your Hostels'
+          title={`Login to your ${"\n"}account.`}
+          desc='Please sign in to your account'
         />
         <Spacer height={30} />
         <InputBox
-          name='name'
-          control={control}
-          placeholder='Enter Full Name'
-          title='Full Name'
-        />
-        <Spacer height={15} />
-        <InputBox
-          name='mobile'
-          control={control}
-          placeholder='Enter Mobile'
+          placeholder='Enter mobile'
           title='Mobile'
-        />
-        <Spacer height={15} />
-        <InputBox
-          name='email'
           control={control}
-          placeholder='Enter Email'
-          title='Email Address'
+          name='mobile'
         />
         <Spacer height={15} />
         <InputBox
-          name='city'
           control={control}
-          placeholder='Enter City'
-          title='City'
-        />
-        <Spacer height={15} />
-        <InputBox
           name='password'
-          control={control}
-          placeholder='Enter Password'
+          placeholder='Password'
           title='Password'
           isPassword
         />
+        {/* <TouchableOpacity activeOpacity={0.8} style={styles.forgotBtn}>
+          <Text style={styles.forgotBtnTxt}>Forgot Password?</Text>
+        </TouchableOpacity> */}
         <Spacer height={30} />
         <CustomBtn
           disabled={loading}
-          onPress={handleSubmit(handleSignup)}
-          title={loading ? "Registering..." : "Register"}
+          onPress={handleSubmit(handleLogin)}
+          title={loading ? "Logging In..." : "Log In"}
         />
         <Spacer height={20} />
         <RowTxtBtn
-          title='Have an account?'
-          btnTxt='Sign In'
+          title="Don't have an account?"
+          btnTxt='Register'
           onPress={() => {
-            router.back();
+            router.push("/signup");
           }}
         />
         <Spacer height={10} />
@@ -125,12 +93,20 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Login;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: appColors.white,
+    backgroundColor: "white",
+  },
+  forgotBtn: {
+    marginTop: moderateScale(20),
+  },
+  forgotBtnTxt: {
+    color: "black",
+    fontWeight: "500",
+    textAlign: "right",
   },
   scrollContainer: {
     paddingHorizontal: moderateScale(20),
